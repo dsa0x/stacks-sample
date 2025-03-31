@@ -9,22 +9,30 @@ terraform {
   }
 }
 
-# resource "tfcoremock_dynamic_resource" "example" {
-#   count = 1
-#   my_value = 2
-# }
-
-# resource "tfcoremock_dynamic_resource" "exampl3" {
-#   for_each = {
-#     for k, v in tfcoremock_dynamic_resource.example: k => v.my_value
-#   }
-#   my_value = each.key
-# }
+resource "tfcoremock_simple_resource" "example" {
+  id      = "my-simple-resource"
+  bool    = true
+}
 
 variable "name" {
   default = "John"
 }
 
+variable "testing" {
+  type        = string
+  description = "Testing"
+  
+  validation {
+    condition     = var.testing != "notvalid"
+    error_message = "The testing variable cannot be 'notvalid'."
+  }
+  
+}
+
 output "message" {
   value = "Hello, ${var.name}"  
+}
+
+output "testing" {
+  value = var.testing
 }
